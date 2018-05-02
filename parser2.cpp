@@ -5,9 +5,9 @@ using namespace std;
 
 int main() {
 	ifstream fitxer;
-	fitxer.open("fitxer.txt");
+	fitxer.open("dadesTractades.txt");
 	ofstream fitxerOut;
-	fitxerOut.open("dadesTractades.txt");
+	fitxerOut.open("dadesTractades2.txt");
 	int counter = 0;
 	double distancia;
 	double angle;
@@ -19,15 +19,13 @@ int main() {
 		angleTotal += angle;
 		if (counter == 10) {
 			counter = 0;
-			fitxerOut << distanciaTotal/10 << " " << angleTotal/10 << endl;
+			fitxerOut << distancia << " " << angleTotal << endl;
 			distanciaTotal = 0;
 			angleTotal = 0;
 		}
 		else counter++;
 	}
-	if (counter != 0) {
-		fitxerOut << distanciaTotal/counter << " " << angleTotal/counter << endl;
-	}
+	fitxerOut << distancia << " " << angleTotal << endl;
 	fitxerOut.close();
 	fitxer.close();
 }
