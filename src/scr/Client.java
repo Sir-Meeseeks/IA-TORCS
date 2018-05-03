@@ -42,7 +42,7 @@ public class Client {
 		driver.setStage(stage);
 		driver.setTrackName(trackName);
                 
-                
+                // Creem el fitxer
 		try {driver.creaFitxer();}
                 catch (IOException hapetao) {}
                 
@@ -114,7 +114,7 @@ public class Client {
 			}
 
 		} while (++curEpisode < maxEpisodes && !shutdownOccurred);
-
+                for (int i = 0; i < driver.vectorDades.size(); i++) System.out.print(driver.vectorDades.get(i)[0]+" "+driver.vectorDades.get(i)[1]+"\n");
 		/*
 		 * Shutdown the controller
 		 */

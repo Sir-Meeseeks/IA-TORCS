@@ -1,11 +1,14 @@
 package scr;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
         
 public abstract class Controller{
     
-    PrintWriter fitxer;    
+    PrintWriter fitxer;
+    public List<double[]> vectorDades =  new ArrayList<double[]>();
     
     public void creaFitxer() throws IOException {
         try {fitxer = new PrintWriter("fitxer.txt");}
