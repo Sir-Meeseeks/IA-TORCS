@@ -124,11 +124,12 @@ public class Client {
                 // -------------------------------------
                 for (int j = 0;j < driver.vectorDades.size(); j++) {
                     dada[1] += driver.vectorDades.get(j)[1];
-                    
                     contadorDeu++;
                     if (contadorDeu == 10 && j <= driver.vectorDades.size()) {
                         dada[0] = driver.vectorDades.get(j)[0];
                         dada[1] = dada[1] / 10;
+                        if(dada[1] < 0.02 && dada[1] > - 0.02)
+                            dada[1]=0;
                         driver.vectorSuavitzat.add(dada);
                         dada = new double[2];
                         dada[1] = 0;
@@ -136,23 +137,22 @@ public class Client {
                     }
                 }
                 for (int i = 0; i < driver.vectorSuavitzat.size(); i++) {
-                    System.out.print(driver.vectorSuavitzat.get(i)[0]+" "+driver.vectorSuavitzat.get(i)[1]+"\n");
+                    //System.out.print(driver.vectorSuavitzat.get(i)[0]+" "+driver.vectorSuavitzat.get(i)[1]+"\n");
                 }
                 dada[0] = dada[1] = 0;
                 
                 // --------------------------------------------
                 // Mapeig del cami condensat de 30 en 30 valors
                 // --------------------------------------------
-                for (int k = 0; k < driver.vectorSuavitzat.size(); k++) {
+                for (int k = 0; k < driver.vectorSuavitzat.size() - 30; k++) {
                     dada[0] = driver.vectorSuavitzat.get(k)[0];
                     for (int l = 0; l < 30; l++) {
-                        if (k+l < driver.vectorSuavitzat.size()) {
                             dada[1] += driver.vectorSuavitzat.get(k+l)[1];
-                        }
                     }
                     driver.vectorMapejat.add(dada);
+                    dada = new double[2];
                 }
-                
+                //System.out.println("MAPEIG: ");
                 for (int i = 0; i < driver.vectorMapejat.size(); i++) {
                     System.out.print(driver.vectorMapejat.get(i)[0]+" "+driver.vectorMapejat.get(i)[1]+"\n");
                 }
