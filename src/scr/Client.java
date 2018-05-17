@@ -116,10 +116,6 @@ public class Client {
 		}
                 while (++curEpisode < maxEpisodes && !shutdownOccurred);
                 
-                for (int i = 0; i < driver.vectorDades.size(); i++) {
-                    System.out.print(driver.vectorDades.get(i)[0]+" "+driver.vectorDades.get(i)[1]+"\n");
-                }
-                
 		int contadorDeu = 0;
                 double[] dada = new double[2]; dada[0] = dada[1] = 0;
                 
@@ -128,14 +124,20 @@ public class Client {
                 // -------------------------------------
                 for (int j = 0;j < driver.vectorDades.size(); j++) {
                     dada[1] += driver.vectorDades.get(j)[1];
+                    
                     contadorDeu++;
-                    if (contadorDeu == 10) {
+                    if (contadorDeu == 10 && j <= driver.vectorDades.size()) {
                         dada[0] = driver.vectorDades.get(j)[0];
+                        dada[1] = dada[1] / 10;
                         driver.vectorSuavitzat.add(dada);
+                        dada = new double[2];
                         dada[1] = 0;
+                        contadorDeu = 0;
                     }
                 }
-                
+                for (int i = 0; i < driver.vectorSuavitzat.size(); i++) {
+                    System.out.print(driver.vectorSuavitzat.get(i)[0]+" "+driver.vectorSuavitzat.get(i)[1]+"\n");
+                }
                 dada[0] = dada[1] = 0;
                 
                 // --------------------------------------------
@@ -149,6 +151,10 @@ public class Client {
                         }
                     }
                     driver.vectorMapejat.add(dada);
+                }
+                
+                for (int i = 0; i < driver.vectorMapejat.size(); i++) {
+                    System.out.print(driver.vectorMapejat.get(i)[0]+" "+driver.vectorMapejat.get(i)[1]+"\n");
                 }
                 
                 /*

@@ -1,5 +1,8 @@
 package scr;
 import java.io.IOException;
+import net.sourceforge.jFuzzyLogic.FIS;
+import net.sourceforge.jFuzzyLogic.FunctionBlock;
+import net.sourceforge.jFuzzyLogic.rule.Variable;
 
 
 /**
@@ -12,10 +15,15 @@ import java.io.IOException;
 public class DeadSimpleSoloController extends Controller {
 
     Boolean flagClean = true;
-
+    String fileName = "src\\scr\\driver.fcl";
+    FIS fis = FIS.load(fileName, true);
+    
     public Action control(SensorModel sensorModel) {
         Action action = new Action ();
-  
+        
+        // --------------------------------------------
+        // Obtenim les dades sense tractar del cicuit
+        // --------------------------------------------
         double[] dada = new double[2];
         dada[0] = sensorModel.getDistanceFromStartLine();
         dada[1] = sensorModel.getAngleToTrackAxis();
@@ -24,6 +32,53 @@ public class DeadSimpleSoloController extends Controller {
             flagClean = false;
         }
         vectorDades.add(dada);
+        //  System.out.print(dada[0]+" "+dada[1]+"\n");
+
+        // --------------------------------------------
+        // Controlador FUZZY
+        // --------------------------------------------
+        fis.setVariable("posicio",sensorModel.getTrackPosition());
+        fis.setVariable("velocitat",sensorModel.getSpeed());
+        fis.setVariable("angleEix",sensorModel.getAngleToTrackAxis());
+        //fis.evaluate();
+        
+        Variable direccio = fis.getVariable("direccio");
+        Variable acceleracio = fis.getVariable("acceleracio");
+        Variable frens = fis.getVariable("frens");
+        
+        action.steering = direccio.getValue();
+        action.accelerate = acceleracio.getValue();
+        action.brake = frens.getValue();
+        
+        // --------------------------------------------
+        // Controlem el cotxe
+        // --------------------------------------------
+        double revolucions = sensorModel.getRPM();
+        int marxa = sensorModel.getGear();
+        
+        // ---> Canviar marxa
+        if (marxa < 1) marxa = 1;
+        else if (action.accelerate > 0) {
+            if (revolucions > 5000 && marxa < 6) marxa++;
+        }
+        else if (action.brake > 0) {
+            if (revolucions < 2500 && marxa > 1) marxa--;
+        }
+ 
+        action.gear = marxa = 1;
+        
+        if (sensorModel.getSpeed() < 50) {
+            action.accelerate = 1;
+        }
+        else action.accelerate = 0;
+        
+        if (sensorModel.getAngleToTrackAxis() < 0) {
+            action.steering = -0.2;
+        }
+        else {
+            action.steering = 0.2;
+        }
+        
         return action;
     }
 
