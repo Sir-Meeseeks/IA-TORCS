@@ -24,35 +24,6 @@ public class DeadSimpleSoloController extends Controller {
             flagClean = false;
         }
         vectorDades.add(dada);
-        //System.out.print(dada[0]+" "+dada[1]+"\n");
-        
-        if (sensorModel.getAngleToTrackAxis() > 0.1) action.steering = 0.2;
-        else if (sensorModel.getAngleToTrackAxis() > 0.2) action.steering = 0.3;
-        else if (sensorModel.getAngleToTrackAxis() > 0.3) action.steering = 0.4;
-        else if (sensorModel.getAngleToTrackAxis() > 0.4) action.steering = 0.5;
-        
-        if (sensorModel.getAngleToTrackAxis() < -0.1) action.steering = -0.2;
-        else if (sensorModel.getAngleToTrackAxis() < -0.2) action.steering = -0.3;
-        else if (sensorModel.getAngleToTrackAxis() < -0.3) action.steering = -0.4;
-        else if (sensorModel.getAngleToTrackAxis() < -0.4) action.steering = -0.5;
-        
-        
-        if (action.gear == 0) action.gear = 1;
-        else if (sensorModel.getSpeed() > 75 && action.gear == 1) {
-            action.gear = 2;
-        }
-        else if (sensorModel.getSpeed() > 130 && action.gear == 2) {
-            action.gear = 3;
-        }
-        else if (sensorModel.getSpeed() > 150 && action.gear == 3) {
-            action.gear = 4;
-        }
-        
-        else if (sensorModel.getAngleToTrackAxis() > 0.1 || sensorModel.getAngleToTrackAxis() < -0.1) {
-            action.brake = 1;
-        }
-        if (sensorModel.getAngleToTrackAxis() < 0.1 && sensorModel.getAngleToTrackAxis() > -0.1) action.accelerate = 1;
-        
         return action;
     }
 

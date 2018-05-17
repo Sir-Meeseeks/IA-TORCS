@@ -9,6 +9,9 @@ public abstract class Controller{
     
     PrintWriter fitxer;
     public List<double[]> vectorDades =  new ArrayList<double[]>();
+    public List<double[]> vectorSuavitzat =  new ArrayList<double[]>();
+    public List<double[]> vectorMapejat =  new ArrayList<double[]>();
+    
     
     public void creaFitxer() throws IOException {
         try {fitxer = new PrintWriter("fitxer.txt");}

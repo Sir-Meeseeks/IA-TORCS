@@ -113,9 +113,45 @@ public class Client {
 					System.out.println("Server did not respond within the timeout");
 			}
 
-		} while (++curEpisode < maxEpisodes && !shutdownOccurred);
-                for (int i = 0; i < driver.vectorDades.size(); i++) System.out.print(driver.vectorDades.get(i)[0]+" "+driver.vectorDades.get(i)[1]+"\n");
-		/*
+		}
+                while (++curEpisode < maxEpisodes && !shutdownOccurred);
+                
+                for (int i = 0; i < driver.vectorDades.size(); i++) {
+                    System.out.print(driver.vectorDades.get(i)[0]+" "+driver.vectorDades.get(i)[1]+"\n");
+                }
+                
+		int contadorDeu = 0;
+                double[] dada = new double[2]; dada[0] = dada[1] = 0;
+                
+                // -------------------------------------
+                // Suavitzat d'error amb agrupacions de 10 valors
+                // -------------------------------------
+                for (int j = 0;j < driver.vectorDades.size(); j++) {
+                    dada[1] += driver.vectorDades.get(j)[1];
+                    contadorDeu++;
+                    if (contadorDeu == 10) {
+                        dada[0] = driver.vectorDades.get(j)[0];
+                        driver.vectorSuavitzat.add(dada);
+                        dada[1] = 0;
+                    }
+                }
+                
+                dada[0] = dada[1] = 0;
+                
+                // --------------------------------------------
+                // Mapeig del cami condensat de 30 en 30 valors
+                // --------------------------------------------
+                for (int k = 0; k < driver.vectorSuavitzat.size(); k++) {
+                    dada[0] = driver.vectorSuavitzat.get(k)[0];
+                    for (int l = 0; l < 30; l++) {
+                        if (k+l < driver.vectorSuavitzat.size()) {
+                            dada[1] += driver.vectorSuavitzat.get(k+l)[1];
+                        }
+                    }
+                    driver.vectorMapejat.add(dada);
+                }
+                
+                /*
 		 * Shutdown the controller
 		 */
 		driver.shutdown();
