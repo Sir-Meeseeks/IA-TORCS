@@ -4,6 +4,7 @@ VAR_INPUT				// Define input variables
 	posicio : REAL;
 	velocitat : REAL;
         angleEix : REAL;
+        gir : REAL;
 END_VAR
 
 VAR_OUTPUT				// Define output variable
@@ -11,6 +12,13 @@ VAR_OUTPUT				// Define output variable
         frens : REAL;
         direccio : REAL;
 END_VAR
+
+FUZZIFY gir
+    TERM noGir := trape 0.000 0.000 1.000 1.000;
+    TERM suau :=  trape 0.500 1.000 3.000 4.500;
+    TERM fort :=  trape 2.500 4.500 10.000 10.0000;
+END_FUZZIFY
+
 
 FUZZIFY posicio
     TERM esquerra := trape 0.300 0.600 9.000 9.000;
@@ -65,7 +73,11 @@ RULEBLOCK rule1
     RULE 5 : if angleEix is centre then direccio is seguirCentre;
     RULE 6 : if angleEix is dreta then direccio is giraEsquerra;
 
-    
+    RULE 7 : if gir is noGir then acceleracio is fullgas; 
+    RULE 8 : if gir is suau and velocitat is f_fast then acceleracio is nogas; 
+    RULE 9 : if gir is fort and velocitat is f_fast then frens is fullbrake;
+    RULE 10: if gir is suau and velocitat is f_very_fast then frens is fullbrake; 
+    RULE 11 : if gir is fort and velocitat is f_very_fast then frens is fullbrake;
 
 END_RULEBLOCK
 
