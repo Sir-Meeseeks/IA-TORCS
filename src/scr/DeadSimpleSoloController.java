@@ -114,8 +114,7 @@ public class DeadSimpleSoloController extends Controller {
             if(vectorMapejat.get(punterMapeig)[0] < pos + 100 )
             {
                 punterMapeig++;
-                punterMapeig = punterMapeig % vectorMapejat.size();//Per poder fer mes de una volta
-                
+                punterMapeig = punterMapeig % vectorMapejat.size();//Per poder fer mes de una volta                
             }
             System.out.println("Ref: "+vectorMapejat.get(punterMapeig)[0]+"My pos + 150: "+ (pos + 150));
             System.out.println("Punter: "+punterMapeig);  

@@ -16,9 +16,8 @@ END_VAR
 FUZZIFY gir
     TERM noGir := trape 0.000 0.000 0.200 0.400;
     TERM suau :=  trape 0.200 0.500 3.000 4.000;
-    TERM fort :=  trape 2.500 4.000 10.000 10.0000;
+    TERM fort :=  trape 3.000 4.000 800.000 8000.0000;
 END_FUZZIFY
-
 
 FUZZIFY posicio
     TERM dolent_dre := trape -500.000 -500.000 -10.000 -9.000;
@@ -78,15 +77,16 @@ RULEBLOCK rule1
     RULE 6 : if angleEix is dreta then direccio is giraEsquerra;
 
     RULE 7 : if gir is noGir then acceleracio is fullgas; 
-    RULE 8 : if gir is suau and velocitat is f_medium then acceleracio is medgas; 
-    RULE 8 : if gir is suau and velocitat is f_fast then acceleracio is nogas; 
-    RULE 9: if gir is suau and velocitat is f_very_fast then frens is fullbrake;
+    RULE 8 : if gir is suau and velocitat is f_medium then acceleracio is fullgas; 
+    RULE 8 : if gir is suau and velocitat is f_fast then acceleracio is medgas; 
+    RULE 9 : if gir is suau and velocitat is f_very_fast then frens is fullbrake;
     RULE 10 : if gir is fort and velocitat is f_fast then frens is midbrake;
     RULE 11 : if gir is fort and velocitat is f_medium then acceleracio is nogas;
     RULE 12 : if gir is fort and velocitat is f_very_fast then frens is fullbrake;
 
     RULE 13 : if posicio is dolent_dre and velocitat is not f_slow then frens is fullbrake;
     RULE 14 : if posicio is dolent_esq and velocitat is not f_slow then frens is fullbrake;
+
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK
