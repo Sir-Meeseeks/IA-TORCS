@@ -109,13 +109,16 @@ public class DeadSimpleSoloController extends Controller {
             //--------------------------------------------
             //  BUSQUEM EL GIR DINS EL VECTOR
             //--------------------------------------------
-            double pos = sensorModel.getTrackPosition();
-            if(vectorMapejat.get(punterMapeig)[0] < pos + 150 )
+            double pos = sensorModel.getDistanceFromStartLine();
+   
+            if(vectorMapejat.get(punterMapeig)[0] < pos + 100 )
             {
                 punterMapeig++;
                 punterMapeig = punterMapeig % vectorMapejat.size();//Per poder fer mes de una volta
-            }
                 
+            }
+            System.out.println("Ref: "+vectorMapejat.get(punterMapeig)[0]+"My pos + 150: "+ (pos + 150));
+            System.out.println("Punter: "+punterMapeig);  
             // --------------------------------------------
             // Controlador FUZZY
             // --------------------------------------------
@@ -125,6 +128,7 @@ public class DeadSimpleSoloController extends Controller {
             double valorgir = vectorMapejat.get(punterMapeig)[1];
             if (valorgir < 0)
                     valorgir*=-1;
+            System.out.println("Gir: "+valorgir);
             fis.setVariable("gir", valorgir);
             fis.evaluate();
 
@@ -155,15 +159,13 @@ public class DeadSimpleSoloController extends Controller {
             // Controlem el cotxe
             // --------------------------------------------
             double revolucions = sensorModel.getRPM();
-            int marxa = sensorModel.getGear();
-            System.out.println(revolucions +" -- "+marxa);
-            
+            int marxa = sensorModel.getGear();            
 
             // ---> Canviar marxa
             if (marxa < 1) marxa = 1;
             else if (action.accelerate > 0) {
-                if (revolucions > 5000 && marxa < 6) marxa++;
-                else if (revolucions < 1000 && marxa > 1)marxa--;
+                if (revolucions > 7000 && marxa < 6) marxa++;
+                else if (revolucions < 4000 && marxa > 1)marxa--;
             }
             else if (action.brake > 0) {
                 if (revolucions < 2500 && marxa > 1) marxa--;
@@ -186,7 +188,7 @@ public class DeadSimpleSoloController extends Controller {
     
     private void processarDades(double[] dada)
     {
-        System.out.println(dada[0]+"  "+dada[1]);
+        //System.out.println(dada[0]+"  "+dada[1]);
         sumaAngles+=dada[1];
         counterSuau++;
         vectorDades.add(dada);
@@ -199,7 +201,7 @@ public class DeadSimpleSoloController extends Controller {
             if(aux[1] < 0.02 && aux[1] > - 0.02)
                 aux[1]=0;
             
-            System.out.println("NOU SUAVITZAT: "+aux[0]+"  "+aux[1]);
+            //System.out.println("NOU SUAVITZAT: "+aux[0]+"  "+aux[1]);
             vectorSuavitzat.add(aux); 
             sumaSuau +=aux[1];
             counterMapping++;
@@ -215,7 +217,7 @@ public class DeadSimpleSoloController extends Controller {
                 sumaSuau -= vectorSuavitzat.get(counterMapping-30)[1];//TREIEM EL PRIMER VALOR DE TOTS, AIXI MANTENIM LA SUMA DELS 30 
 
             aux2[1] = sumaSuau; 
-            System.out.println("NOU MAPPING: "+aux2[0]+"  "+aux2[1]);
+           System.out.println("NOU MAPPING: "+aux2[0]+"  "+aux2[1]);
             vectorMapejat.add(aux2);
         }
 
