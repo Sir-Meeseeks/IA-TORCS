@@ -22,7 +22,7 @@ END_FUZZIFY
 
 FUZZIFY posicio
     TERM dolent_dre := trape -500.000 -500.000 -10.000 -9.000;
-    TERM dolen_esq := trape 9.000 10.000 500.000 500.000;
+    TERM dolent_esq := trape 9.000 10.000 500.000 500.000;
     TERM esquerra := trape 0.300 0.600 9.000 9.000;
     TERM dreta :=  trape -9.000 -9.000 -0.600 -0.300;
     TERM centre :=  trape -0.600 -0.300 0.300 0.600;
