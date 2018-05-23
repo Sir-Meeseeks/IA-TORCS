@@ -24,6 +24,10 @@ public class DeadSimpleSoloController extends Controller {
     int lap = 0;
     boolean newlap = false;
     
+    //Marxes
+    int[] marxaAmunt = {6000,7000,7500,7500,8000,0};
+    int[] marxaAvall = {0,3500,4000,4000,5000,5000};
+    
     //Entrar dades
     int counterSuau = 0; 
     double sumaAngles = 0; 
@@ -75,23 +79,24 @@ public class DeadSimpleSoloController extends Controller {
             if (dada[1] > -0.005 && dada[1] < 0.005) 
                 dada[1] = 0;
             
+            //System.out.print(dada[1]+"\n");
             
-             action.gear = 2;
+             action.gear = 1;
         
             if (sensorModel.getSpeed() < 65) {
                 action.accelerate = 1;
             }
             else action.accelerate = 0;
 
-            if (dada[1] <0) {
+            if (dada[1] < 0) {
                 //GIR A L'ESQUERRA
                 action.steering = -0.2;
                 angle+= -0.2;
             }
-            else if (dada[1] > 0 ) {
+            else if (dada[1] > 0) {
                 //GIR A LA DRETA
                 action.steering = 0.2;
-                angle+=0.2;
+                angle+= 0.2;
             }
             else{
                 //RESET DEL GIR
@@ -152,6 +157,7 @@ public class DeadSimpleSoloController extends Controller {
             }*/
                 
             action.accelerate = acceleracio.getValue();
+            System.out.print(acceleracio.getValue()+"\n");
             action.brake = frens.getValue();
 
             // --------------------------------------------
@@ -161,15 +167,9 @@ public class DeadSimpleSoloController extends Controller {
             int marxa = sensorModel.getGear();            
 
             // ---> Canviar marxa
-            if (marxa < 1) marxa = 1;
-            else if (action.accelerate > 0) {
-                if (revolucions > 7000 && marxa < 6) marxa++;
-                else if (revolucions < 4000 && marxa > 1)marxa--;
-            }
-            else if (action.brake > 0) {
-                if (revolucions < 2500 && marxa > 1) marxa--;
-            }
-             action.gear = marxa;
+            if (marxa < 6 && revolucions >= marxaAmunt[marxa-1]) marxa = marxa+1;
+            else if (marxa > 1 && revolucions <= marxaAvall[marxa-1]) marxa = marxa-1;
+            action.gear = marxa;
         }
      
 

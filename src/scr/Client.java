@@ -154,7 +154,7 @@ public class Client {
                 }
                 //System.out.println("MAPEIG: ");
                 for (int i = 0; i < driver.vectorMapejat.size(); i++) {
-                    System.out.print(driver.vectorMapejat.get(i)[0]+" "+driver.vectorMapejat.get(i)[1]+"\n");
+                    //System.out.print(driver.vectorMapejat.get(i)[0]+" "+driver.vectorMapejat.get(i)[1]+"\n");
                 }
                 
                 /*
