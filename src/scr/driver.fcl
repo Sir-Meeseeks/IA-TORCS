@@ -1,13 +1,13 @@
-FUNCTION_BLOCK tipper	// Block definition (there may be more than one block per file)
+FUNCTION_BLOCK tipper
 
-VAR_INPUT				// Define input variables
+VAR_INPUT
 	posicio : REAL;
 	velocitat : REAL;
         angleEix : REAL;
         gir : REAL;
 END_VAR
 
-VAR_OUTPUT				// Define output variable
+VAR_OUTPUT
 	acceleracio : REAL;
         frens : REAL;
         direccio : REAL;
@@ -16,7 +16,7 @@ END_VAR
 FUZZIFY gir
     TERM noGir := trape 0.000 0.000 1.500 1.800;
     TERM suau :=  trape 1.000 1.300 5.000 6.000;
-    TERM fort :=  trape 4.000 6.500 800.000 8000.0000;
+    TERM fort :=  trape 4.000 6.500 800.000 800.0000;
 END_FUZZIFY
 
 FUZZIFY posicio
@@ -30,19 +30,21 @@ END_FUZZIFY
 FUZZIFY velocitat
     TERM lent :=  trape 0.000 0.000 40.000 70.000;
     TERM mig_rapid := trape 40.000 60.000 80.000 90.000;
-    TERM rapid :=  trape 100.000 110.000 140.000 170.000;
+    TERM rapid :=  trape 85.000 110.000 140.000 170.000;
     TERM molt_rapid :=  trape 170.000 180.000 300.000 300.000;
 END_FUZZIFY
 
 FUZZIFY angleEix
-    TERM esquerra :=  trape -3.150 -3.150  -0.900 -0.000;
+    TERM esquerra :=  trape -20.150 -20.150  -0.900 -0.000;
     TERM centre :=  trape -0.900 -0.000 0.000 0.900;
-    TERM dreta :=  trape 0.000 0.900 3.150 3.150;
+    TERM dreta :=  trape 0.000 0.900 20.150 20.150;
 END_FUZZIFY
 
 DEFUZZIFY direccio
     TERM giraDreta :=  trape -1.000 -1.000 -0.100 0.000;
+    TERM girDretaFort := trape -2.000 -2.000 -1.000 -0.500;
     TERM giraEsquerra :=  trape 0.000 0.100 1.000 1.000;
+    TERM girEsquerraFort := trape  0.500 1.000 2.000 2.000;
     TERM seguirCentre :=  trian -0.100 0.000 0.100;
     METHOD : COG;
     DEFAULT := 0.000;
@@ -51,7 +53,7 @@ END_DEFUZZIFY
 DEFUZZIFY acceleracio
     TERM no_gas := trape 0.000 0.000 0.200 0.400;
     TERM mig_gas := trian 0.100 0.200 0.300;
-    TERM tot_gas := trape 0.900 0.900 1.000 1.000;
+    TERM tot_gas := trape 1.000 1.000 1.000 1.000;
     METHOD : COG;
     DEFAULT := 1.000;
 END_DEFUZZIFY
@@ -82,16 +84,21 @@ RULEBLOCK rule1
     RULE 10 : if gir is suau and velocitat is mig_rapid then frens is no_frens; 
     RULE 11 : if gir is suau and velocitat is rapid then acceleracio is tot_gas; 
     RULE 12 : if gir is suau and velocitat is molt_rapid then frens is mig_frens;
-    RULE 13 : if gir is fort and velocitat is lent then acceleracio is mig_gas;
-    RULE 14 : if gir is fort and velocitat is mig_rapid then acceleracio is no_gas;
-    RULE 15 : if gir is fort and velocitat is mig_rapid then frens is no_frens;
-    RULE 16 : if gir is fort and velocitat is rapid then acceleracio is no_gas;
-    RULE 17 : if gir is fort and velocitat is rapid then frens is mig_frens;
-    RULE 18 : if gir is fort and velocitat is molt_rapid then acceleracio is no_gas;
-    RULE 19 : if gir is fort and velocitat is molt_rapid then frens is tot_frens;
+    RULE 13 : if gir is fort and velocitat is lent then acceleracio is tot_gas;
+    RULE 14 : if gir is fort and velocitat is lent then frens is no_frens;
+    RULE 15 : if gir is fort and velocitat is mig_rapid then acceleracio is no_gas;
+    RULE 16 : if gir is fort and velocitat is mig_rapid then frens is no_frens;
+    RULE 17 : if gir is fort and velocitat is rapid then acceleracio is no_gas;
+    RULE 18 : if gir is fort and velocitat is rapid then frens is mig_frens;
+    RULE 19 : if gir is fort and velocitat is molt_rapid then acceleracio is no_gas;
+    RULE 20 : if gir is fort and velocitat is molt_rapid then frens is tot_frens;
 
-    RULE 20 : if posicio is dolent_dre and velocitat is not lent then frens is tot_frens;
-    RULE 21 : if posicio is dolent_esq and velocitat is not lent then frens is tot_frens;
+
+    RULE 21 : if posicio is dolent_dre and velocitat is not lent then frens is tot_frens;
+    RULE 22 : if posicio is dolent_esq and velocitat is not lent then frens is tot_frens;
+
+    RULE 23 : if gir is fort and angleEix is esquerra then direccio is girDretaFort;
+    RULE 24 : if gir is fort and angleEix is dreta then direccio is girEsquerraFort;
 
 END_RULEBLOCK
 

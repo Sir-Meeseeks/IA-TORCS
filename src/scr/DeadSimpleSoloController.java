@@ -25,8 +25,8 @@ public class DeadSimpleSoloController extends Controller {
     boolean newlap = false;
     
     //Marxes
-    int[] marxaAmunt = {6000,7000,7500,7500,8000,0};
-    int[] marxaAvall = {0,3500,4000,4000,5000,5000};
+    int[] marxaAmunt = {6500,7500,8000,8000,8500,0};
+    int[] marxaAvall = {0,2000,4500,4500,5000,5000};
     
     //Entrar dades
     int counterSuau = 0; 
@@ -35,6 +35,8 @@ public class DeadSimpleSoloController extends Controller {
     int counterMapping = 0;
     //Ubicar el cotxe dins el vector
     int punterMapeig = 1; 
+    int midaMapping = 30;
+    int posPointer = 100;
     //Per debuggar FUZZYLOGIC
     boolean showup = true; 
     int counter =0;
@@ -116,13 +118,13 @@ public class DeadSimpleSoloController extends Controller {
             //--------------------------------------------
             double pos = sensorModel.getDistanceFromStartLine();
    
-            if(vectorMapejat.get(punterMapeig)[0] < pos + 100 )
+            if(vectorMapejat.get(punterMapeig)[0] < pos + posPointer )
             {
                 punterMapeig++;
                 punterMapeig = punterMapeig % vectorMapejat.size();//Per poder fer mes de una volta                
             }
-            System.out.println("Ref: "+vectorMapejat.get(punterMapeig)[0]+"My pos + 150: "+ (pos + 150));
-            System.out.println("Punter: "+punterMapeig);  
+            //System.out.println("Ref: "+vectorMapejat.get(punterMapeig)[0]+"My pos + 150: "+ (pos + 150));
+            //System.out.println("Punter: "+punterMapeig);  
             // --------------------------------------------
             // Controlador FUZZY
             // --------------------------------------------
@@ -132,7 +134,7 @@ public class DeadSimpleSoloController extends Controller {
             double valorgir = vectorMapejat.get(punterMapeig)[1];
             if (valorgir < 0)
                     valorgir*=-1;
-            System.out.println("Gir: "+valorgir);
+            //System.out.println("Gir: "+valorgir);
             fis.setVariable("gir", valorgir);
             fis.evaluate();
 
@@ -157,7 +159,7 @@ public class DeadSimpleSoloController extends Controller {
             }*/
                 
             action.accelerate = acceleracio.getValue();
-            System.out.print(acceleracio.getValue()+"\n");
+            //System.out.print(acceleracio.getValue()+"\n");
             action.brake = frens.getValue();
 
             // --------------------------------------------
@@ -208,12 +210,12 @@ public class DeadSimpleSoloController extends Controller {
             mapping = true;//Aixi nomes fa el mapejat quan entra un nou valor al suavitzat
         }
         //TENIM 30 VALORS DE SUAVITZAT, PODEM FER EL MAPPING 
-        if(counterMapping > 29 && mapping)
+        if(counterMapping > midaMapping-1 && mapping)
         {
             double[]aux2 = new double[2];
             aux2[0] = dada[0];
-            if(counterMapping > 30)//Hi ha més de un valor
-                sumaSuau -= vectorSuavitzat.get(counterMapping-30)[1];//TREIEM EL PRIMER VALOR DE TOTS, AIXI MANTENIM LA SUMA DELS 30 
+            if(counterMapping > midaMapping)//Hi ha més de un valor
+                sumaSuau -= vectorSuavitzat.get(counterMapping-midaMapping)[1];//TREIEM EL PRIMER VALOR DE TOTS, AIXI MANTENIM LA SUMA DELS 30 
 
             aux2[1] = sumaSuau; 
            System.out.println("NOU MAPPING: "+aux2[0]+"  "+aux2[1]);
